@@ -1,9 +1,6 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { VTextField, VBtn} from 'vuetify/components';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -22,82 +19,78 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="Cadastrar" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
+            <v-form>
+                <v-container>
+                
+                <v-text-field
                     v-model="form.name"
-                    required
+                    id="name"
+                    label="Name"
+                    type="text"
+                    class="mt-1"
                     autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    :href="route('login')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    @input="form.clearErrors('name')"
+                    :error-messages="form.errors.name"
                 >
-                    Already registered?
-                </Link>
+                </v-text-field>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
+
+                <v-text-field
+                    v-model="form.email"
+                    id="email"
+                    label="Email"
+                    type="email"
+                    class="mt-4"
+                    @input="form.clearErrors('email')"
+                    :error-messages="form.errors.email"
+                >
+                </v-text-field>
+
+                <v-text-field
+                    v-model="form.password"
+                    id="password"
+                    label="Password"
+                    type="password"
+                    class="mt-4"
+                    @input="form.clearErrors('password')"
+                    :error-messages="form.errors.password"
+                >
+                </v-text-field>
+
+                <v-text-field
+                    v-model="form.password_confirmation"
+                    id="password_confirmation"
+                    label="Confirm Password"
+                    type="password"
+                    class="mt-4"
+                    @input="form.clearErrors('password_confirmation')"
+                    :error-messages="form.errors.password_confirmation"
+                >
+                </v-text-field>
+
+                <v-row class="mt-4">
+                    <v-col class="flex justify-between items-center align-center">
+                        <Link
+                            :href="route('login')"
+                            class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Já está cadastrado?
+                        </Link>
+
+                        <v-btn
+                            color="light-blue darken-3"
+                            variant="flat"
+                            :loading="form.processing"
+                            @click="submit"
+                            class="ml-4"
+                        >
+                            Cadastrar
+                        </v-btn>
+                    </v-col>
+                </v-row>
+                </v-container>
+            </v-form>
     </GuestLayout>
 </template>
