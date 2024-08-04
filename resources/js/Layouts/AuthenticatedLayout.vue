@@ -1,16 +1,5 @@
-<script setup>
-import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
-
-const showingNavigationDropdown = ref(false);
-</script>
-
 <template>
+    <Head :title="title" />
     <div>
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
@@ -20,7 +9,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('person.index')">
                                     <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800"
                                     />
@@ -29,8 +18,8 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                <NavLink :href="route('person.index')" :active="route().current('person.index')">
+                                   Pessoas
                                 </NavLink>
                             </div>
                         </div>
@@ -111,8 +100,8 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                        <ResponsiveNavLink :href="route('person.index')" :active="route().current('person.index')">
+                           Pessoas
                         </ResponsiveNavLink>
                     </div>
 
@@ -128,7 +117,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                Desconectar-se
                             </ResponsiveNavLink>
                         </div>
                     </div>
@@ -149,3 +138,92 @@ const showingNavigationDropdown = ref(false);
         </div>
     </div>
 </template>
+<script>
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import NavLink from '@/Components/NavLink.vue';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import { Link, Head } from '@inertiajs/vue3';
+
+export default {
+    components: {
+        ApplicationLogo,
+        Dropdown,
+        DropdownLink,
+        NavLink,
+        ResponsiveNavLink,
+        Link,
+        Head,
+    },
+
+    props: {
+        title: String,
+    },
+
+    data() {
+        return {
+            showingNavigationDropdown: false,
+        };
+    },
+
+    methods: {
+        validateFlash(flash) {
+            if (flash.success === true) {
+                return this.$swal({
+                    toast: true,
+                    position: 'bottom-end',
+                    customClass: {
+                        container: 'mb-8',
+                        popup: 'colored-toast',
+                    },
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    icon: "success",
+                    title: flash.message
+                })
+            } else if (flash.success === false) {
+                return this.$swal({
+                    toast: true,
+                    position: 'bottom-end',
+                    customClass: {
+                        container: 'mb-8',
+                        popup: 'colored-toast',
+                    },
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    icon: "error",
+                    title: flash.message
+                })
+            }    
+        }
+    },
+
+    computed: {
+        flash() {
+            return this.$page.props.flash
+        }
+    },
+
+    mounted() {
+        this.validateFlash(this.flash);
+    },
+
+    watch: {
+        flash: function(newFlash, oldFlash) {
+            return this.validateFlash(newFlash)
+        }
+    }
+};
+</script>
+<style>
+.colored-toast.swal2-icon-success {
+  background-color: #d2f8d85b !important;
+}
+
+.colored-toast.swal2-icon-error {
+  background-color: #f0a9a97a !important;
+}
+</style>

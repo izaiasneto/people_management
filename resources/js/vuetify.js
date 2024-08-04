@@ -10,6 +10,7 @@ const vuetify = createVuetify({
       mdi,
     },
   },
+  
 });
 
 export default vuetify;
